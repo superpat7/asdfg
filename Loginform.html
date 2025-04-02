@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Form</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .container { margin-top: 50px; }
+        .disabled { background-color: gray; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Username" required><br><br>
+        <input type="password" id="password" placeholder="Password" required><br><br>
+        <button id="loginBtn" onclick="login()">Login</button>
+        <p id="message"></p>
+    </div>
+    
+    <script>
+        let attempts = 0;
+        let lockout = false;
+        const correctUsername = "admin123";
+        const correctPassword = "admin123";
+        
+        function login() {
+            if (lockout) return;
+            
+            let user = document.getElementById("username").value;
+            let pass = document.getElementById("password").value;
+            let message = document.getElementById("message");
+            
+            if (user === correctUsername && pass === correctPassword) {
+                message.style.color = "green";
+                message.textContent = "Login successful!";
+                window.location.href = "index.html";
+            } else {
+                attempts++;
+                message.style.color = "red";
+                message.textContent = "Incorrect credentials. Try again.";
+                
+                if (attempts >= 3) {
+                    lockout = true;
+                    document.getElementById("loginBtn").classList.add("disabled");
+                    document.getElementById("loginBtn").disabled = true;
+                    message.textContent = "Too many attempts. Please wait 10 seconds.";
+                    
+                    setTimeout(() => {
+                        lockout = false;
+                        attempts = 0;
+                        document.getElementById("loginBtn").classList.remove("disabled");
+                        document.getElementById("loginBtn").disabled = false;
+                        message.textContent = "";
+                    }, 10000);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
